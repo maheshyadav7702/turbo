@@ -1,0 +1,14 @@
+{
+  
+    "$schema": "https://getcomposer.org/schema.json",
+    "tasks":{
+        "dev":{
+            "persistent": true,
+            "cache": false
+        },
+        "build":{
+            "dependsOn":["^build", "test", "lint"],
+            "outputs":[".next/**", "!.next/cache/**"]
+        }
+    }
+}
