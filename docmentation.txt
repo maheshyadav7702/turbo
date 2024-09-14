@@ -1,0 +1,30 @@
+// to install the turbo
+
+"https://turbo.build/repo/docs/getting-started/add-to-existing-repository";
+
+# Global install
+npm install turbo --global
+# Install in repository
+npm install turbo --save-dev
+
+------------------------
+
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
+    "check-types": {
+      "dependsOn": ["^check-types"]
+    },
+    "dev": {
+      "persistent": true,
+      "cache": false
+    }
+  }
+}
+
+// local in production mode
+    "start": "node apps/api/dist/main"

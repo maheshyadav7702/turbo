@@ -1,0 +1,59 @@
+#compiled output
+/dist
+/tmp
+/out-tsc
+
+
+# dependencies
+/node_modules
+
+# IDE - VSCode
+/.vscode
+/apps/.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+.DS_Store
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# build files
+/build
+
+# local files
+
+# Next.js
+.next
+out
+
+# Turbo
+.turbo
+
+# Yarn
+.yarn
+.yarnrc
+.yarn.lock
+
+# npm
+/node_modules
+npm-debug.log
+yarn-error.log
+
+# testing
+/coverage
+
+# vercel
+.vercel
+
+
+
+
+
+
+
