@@ -35,7 +35,7 @@ jobs:
       #run: |
       #sudo chmod 755 /home/ubuntu/core-service-actions-runner/_work/core-services/core-services/
       #sudo rm -rf /home/ubuntu/core-service-actions-runner/_work/core-services/core-services/.scannerwork
-      - name: Checkout source code
+      - name: Check out repository
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
