@@ -1,1 +1,44 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+/dist
+/tmp
+/out-tsc
+
+# dependencies
 node_modules
+/.pnp
+.pnp.js
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# IDE - VSCode
+/apps/.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+.DS_Store
+*.pem
+
+# Environment files
+.env*
+
+# vercel
+.vercel
+
+apps/core-api-service/mongodata/*
+
+apps/core-api-service/.eslintcache
+apps/core-app-service/.eslintcache
+apps/core-app-service/.turbo
+apps/core-api-service/.turbo
+apps/coverage
+.eslintcache

@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: app
+    image: 445567071754.dkr.ecr.us-east-2.amazonaws.com/myecr-repo:core-app-v1
+    build:
+      context: ./apps/app
+      dockerfile: ../../container/Dockerfile.app
+      target: development
+      args:
+        NODE_ENV: 'development'
+        BASE_IMAGE: node:16.15-buster-slim
+        # NPM_TOKEN: ${NPM_TOKEN}
+    environment:
+      NODE_ENV: 'development'
+      PORT: ${CORE_APP_PORT:-3040}
+    volumes:
+      - ./apps/app:/usr/src/app
+      - /usr/src/app/node_modules/
+    env_file:
+      - ./apps/app/.env
+    ports:
+      - ${CORE_APP_PORT:-3040}:${CORE_APP_PORT:-3040}
+    command: npm run dev
+    restart: always
+
+  mongodb-service:
+    container_name: mongodb-service
+    image: mongo:5.0
+    env_file:
+      - ./apps/api/.env
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_DATA: /data/db
+    volumes:
+      - ./apps/api/mongodata:/data/db
+
+  api:
+    container_name: api
+    build:
+      context: ./apps/api
+      dockerfile: ../../container/Dockerfile.api
+      target: development
+      args:
+        NODE_ENV: 'development'
+        BASE_IMAGE: node:16.15-buster-slim
+    environment:
+      NODE_ENV: 'development'
+      PORT: ${CORE_API_PORT:-3050}
+    volumes:
+      - ./apps/api:/usr/src/app
+      - /usr/src/app/node_modules/
+    env_file:
+      - ./apps/api/.env
+    ports:
+      - ${CORE_API_PORT:-3050}:${OKR_API_PORT:-3050}
+    command: npm run start:debug
+    restart: always
+    depends_on:
+      - mongodb-service
+
+networks:
+  default:
+    name: server_backend
