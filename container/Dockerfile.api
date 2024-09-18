@@ -1,0 +1,60 @@
+FROM node:16.18-buster-slim AS base
+
+RUN apt-get update && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends dumb-init \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+###
+# development
+###
+FROM base as development
+
+WORKDIR /usr/src/app
+
+ARG NODE_ENV
+
+COPY --chown=node:node package*.json ./
+
+# ci depends on NODE_ENV
+# TODO: remove the --ignore and --legacy options from npm ci
+RUN npm ci --include=dev --legacy-peer-deps
+
+COPY --chown=node:node . .
+
+USER node
+
+EXPOSE ${CORE_API_PORT}
+# EXPOSE 8000
+
+###
+# build for production
+###
+FROM base as build
+
+WORKDIR /usr/src/app
+
+COPY --chown=node:node package*.json ./
+COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
+COPY --chown=node:node . .
+
+RUN npm run build
+
+# cleanup node_modules before production stage
+ENV NODE_ENV=production
+RUN npm prune --only=production && npm cache clean --force
+USER node
+
+###
+# production
+###
+FROM base AS production
+
+WORKDIR /usr/src/app
+
+COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
+COPY --chown=node:node --from=build /usr/src/app/dist ./dist
+
+EXPOSE 8000
+
+CMD ["dumb-init", "node", "dist/main"]
