@@ -12,6 +12,7 @@
     "start": "node apps/api/dist/main"
   },
   "workspaces": [
-    "apps/*"
+    "apps/app",
+    "apps/api"
   ]
 }
