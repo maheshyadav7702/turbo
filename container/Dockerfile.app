@@ -22,8 +22,8 @@ RUN npm ci --include=dev --legacy-peer-deps
 
 USER node
 
-EXPOSE ${CORE_APP_PORT}
-# EXPOSE 3000
+# EXPOSE ${CORE_APP_PORT}
+EXPOSE 3000
 
 ###
 # build for production
@@ -53,6 +53,6 @@ WORKDIR /usr/src/app
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 
-EXPOSE 3040
+EXPOSE 3000
 
 CMD ["dumb-init", "node", "dist/main"]
