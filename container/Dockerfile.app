@@ -17,7 +17,7 @@ ENV NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN
 RUN echo "engine-strict=true" >> /app/.npmrc && \
     echo "save-prefix=\"\"" >> /app/.npmrc && \
     echo "//npm.pkg.github.com/:_authToken=$NPM_AUTH_TOKEN" >> /app/.npmrc && \
-    echo "@CareerEdgeDevOps:registry=https://npm.pkg.github.com" >> /app/.npmrc && \
+    echo "@maheshyadav7702:registry=https://npm.pkg.github.com" >> /app/.npmrc && \
     echo "registry=https://registry.npmjs.org" >> /app/.npmrc
 RUN npx turbo prune --scope="app" --docker
 
