@@ -34,11 +34,11 @@ node_modules
 # vercel
 .vercel
 
-apps/core-api-service/mongodata/*
+# apps/core-api-service/mongodata/*
 
-apps/core-api-service/.eslintcache
-apps/core-app-service/.eslintcache
-apps/core-app-service/.turbo
-apps/core-api-service/.turbo
-apps/coverage
+apps/app/.eslintcache
+apps/api/.eslintcache
+apps/app/.turbo
+apps/api/.turbo
+# apps/coverage
 .eslintcache
