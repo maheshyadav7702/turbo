@@ -3,30 +3,22 @@ RUN npm install -g npm@10.2.4
 
 FROM base AS builder
 RUN apk add --no-cache libc6-compat
-# RUN apk update
+RUN apk update
 # Set working directory
 WORKDIR /app
-# RUN npm install -g turbo@1.12.3
-# COPY package*.json ./
-# COPY turbo.json ./
-
-# Copy the application code
+RUN npm install -g turbo@1.12.3
+COPY package*.json ./
+COPY turbo.json ./
 COPY ./apps/app ./apps/app
-
-# Set up .npmrc
 ARG NPM_AUTH_TOKEN
 ENV NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN
-RUN echo "-strict=true" >> /app/.npmrc && \
+
+
+RUN echo "engine-strict=true" >> /app/.npmrc && \
     echo "save-prefix=\"\"" >> /app/.npmrc && \
     echo "//npm.pkg.github.com/:_authToken=$NPM_AUTH_TOKEN" >> /app/.npmrc && \
     echo "@maheshyadav7702:registry=https://npm.pkg.github.com" >> /app/.npmrc && \
     echo "registry=https://registry.npmjs.org" >> /app/.npmrc
-
-# Install turbo globally
-RUN npm install -g turbo
-
-
-# Run turbo prune
 RUN npx turbo prune --scope="app" --docker
 
 # Add lockfile and package.json's of isolated subworkspace
