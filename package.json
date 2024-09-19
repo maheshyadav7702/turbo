@@ -1,16 +1,17 @@
 {
-  "name":"turbo",
-  "version":"1.0.0",
+  "name": "turbo",
+  "version": "1.0.0",
   "description": "turbo",
-
-  "packageManager":"npm@10.5.0",
+  "packageManager": "npm@10.5.0",
   "devDependencies": {
     "turbo": "^2.1.2"
   },
   "scripts": {
-    "dev":"turbo run dev",
-    "build":"turbo run build",
-    "start":"node apps/api/dist/main"
+    "dev": "turbo run dev --no-cache --parallel --continue",
+    "build": "turbo run build --no-daemon",
+    "start": "node apps/api/dist/main"
   },
-  "workspaces":["apps/*"]
+  "workspaces": [
+    "apps/*"
+  ]
 }
