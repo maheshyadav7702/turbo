@@ -27,7 +27,7 @@ RUN echo "-strict=true" >> /app/.npmrc && \
 RUN npm install -g turbo
 
 # Run turbo prune
-RUN npx turbo prune --scope="app" --docker
+RUN npx turbo prune --scope="my-app" --docker
 
 RUN cat /path/to/turbo.json
 

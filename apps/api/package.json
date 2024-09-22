@@ -1,11 +1,11 @@
 {
-  "name": "api",
+  "name": "my-api",
   "version": "0.0.1",
   "description": "",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
-  "packageManager":"npm@10.5.0",
+  "packageManager": "npm@10.5.0",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
