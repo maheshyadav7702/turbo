@@ -6,51 +6,48 @@ RUN npm install -g npm@10.2.4
 
 # Builder stage
 FROM base AS builder
+RUN apk add --no-cache libc6-compat
 
-# Install necessary packages
-RUN apk add --no-cache libc6-compat && apk update
-
-# Set working directory
+# Set the working directory
 WORKDIR /app
 
-# Install turbo globally
-RUN npm install -g turbo@1.12.3
-
-# Copy necessary files
-COPY package*.json turbo.json ./
+# Copy the application code
 COPY ./apps/app ./apps/app
 
-# Set up environment variables
+# Set up .npmrc
 ARG NPM_AUTH_TOKEN
 ENV NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN
+RUN echo "-strict=true" >> /app/.npmrc && \
+    echo "save-prefix=\"\"" >> /app/.npmrc && \
+    echo "//npm.pkg.github.com/:_authToken=$NPM_AUTH_TOKEN" >> /app/.npmrc && \
+    echo "@maheshyadav7702:registry=https://npm.pkg.github.com" >> /app/.npmrc && \
+    echo "registry=https://registry.npmjs.org" >> /app/.npmrc
 
-# Configure npm
-RUN echo "engine-strict=true" >> .npmrc && \
-    echo "save-prefix=\"\"" >> .npmrc && \
-    echo "//npm.pkg.github.com/:_authToken=$NPM_AUTH_TOKEN" >> .npmrc && \
-    echo "@maheshyadav7702:registry=https://npm.pkg.github.com" >> .npmrc && \
-    echo "registry=https://registry.npmjs.org" >> .npmrc
+# Install turbo globally
+RUN npm install -g turbo
 
-# Prune dependencies for Docker
+# Run turbo prune
 RUN npx turbo prune --scope="app" --docker
 
-# Installer stage
+RUN cat /path/to/turbo.json
+
+# Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
-
-# Install necessary packages
-RUN apk add --no-cache libc6-compat && apk update
-
-# Set working directory
+RUN apk add --no-cache libc6-compat
+RUN apk update
 WORKDIR /app
-
-# Copy necessary files from builder stage
+# First install the dependencies (as they change less often)
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/package-lock.json ./package-lock.json
 COPY --from=builder /app/.npmrc ./.npmrc
+RUN npm install turbo
+RUN npm install
+# Build the project
+# COPY --from=builder /app/out/full/ .
+# ARG NEXT_PUBLIC_CONTAINER_ENV_VAR
 
-# Install dependencies
-RUN npm install turbo && npm install
+
 
 # Build the application
 RUN npx turbo run build --filter=app
@@ -63,7 +60,7 @@ WORKDIR /app
 
 # Set environment variables
 ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+# ENV NEXT_TELEMETRY_DISABLED 1
 
 # Copy necessary files from builder and installer stages
 COPY --from=builder /app/.npmrc ./.npmrc 
